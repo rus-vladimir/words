@@ -1,0 +1,3 @@
+sudo docker build -t wordru.api -f ./dockerfile .
+
+sudo docker run -it -p 8081:8081 --name wordruapi wordru.api

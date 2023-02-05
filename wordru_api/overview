@@ -1,0 +1,3 @@
+API
+ - start new game(UUID session) > ()
+ - check word(session ,string word) -> (list<CharWithResult>)

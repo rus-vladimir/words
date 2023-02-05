@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  wordruapi:
+    image: storedriver/wordru.api:latest
+    container_name: wordruapi
+    restart: always
+    networks:
+      - intranet
+    ports:
+      - 8081:8081
+    environment:
+      REDIS_HOST: 'wordru_cache'
+      REDIS_PORT: '6379'
+    depends_on:
+      - redis
+
+  wordrufe:
+    image: storedriver/wordru.fe:latest
+    container_name: wordrufe
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - intranet 
+    depends_on:
+      - wordruapi
+      - redis
+
+  redis:
+    image: redis:latest
+    container_name: wordru_cache
+    restart: always
+    volumes: 
+      - shared_database:/data/db
+    networks:
+      - intranet
+    # ports:
+    #   - 6379:6379
+
+volumes:
+  shared_database:
+
+networks:
+  intranet:  

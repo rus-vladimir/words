@@ -1,0 +1,10 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "wordru:lib"
+
+    - path: "./app/Main.hs"
+      component: "wordru:exe:wordru-exe"
+
+    - path: "./test"
+      component: "wordru:test:wordru-test"

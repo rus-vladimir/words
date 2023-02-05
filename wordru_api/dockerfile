@@ -1,0 +1,88 @@
+# The below is a combination of the following two things:
+# 1) This article + corresponding Gist: https://medium.com/permutive/optimized-docker-builds-for-haskell-76a9808eb10b
+# 2) This Reddit comment in response to the above:
+#      - https://www.reddit.com/r/haskell/comments/cl5uod/optimized_docker_builds_for_haskell/evuzccm/
+# It is a multi-stage Docker build with 3 stages: 1) dependencies, 2) build, and 3) deploy
+
+# -------------------------------------------------------------------------------------------
+# STAGE 1: Dependencies
+# -------------------------------------------------------------------------------------------
+FROM haskell:8.10.7 as dependencies
+
+RUN mkdir /opt/build
+WORKDIR /opt/build
+
+# GHC dynamically links its compilation targets to lib gmp
+RUN  apt-get update -y \
+  && apt-get download -y libgmp10
+RUN mv libgmp*.deb libgmp.deb
+
+# First build long-term stable dependencies using YAML/etc. files you do not expect to change often
+# Keep those locally in a /long-term/ sub-directory to your project's root path
+COPY ./long-term/stack.yaml ./long-term/package.yaml ./long-term/stack.yaml.lock ./  
+RUN stack build --dependencies-only
+
+# If the current .yaml files in your project root have not changed from the long-term versions,
+# Docker should use the cached version from the above layer. If they HAVE changed, Docker will
+# rebuild the dependencies. If those changes are permanent, move the YAMLs into new /long-term/
+COPY ./stack.yaml ./package.yaml ./stack.yaml.lock ./
+RUN stack build --dependencies-only
+
+
+# In the 'haskell' image, stack is configured with
+#   - system-ghc: true
+#   - install-ghc: false
+
+# If an error is thrown by stack saying that it cannot find the correct GHC, then:
+#   - You might have tried a `stack build`/etc. command in a folder lacking
+#     a stack.yaml that correspnds to the version indicated in FROM above
+#   - Stack then defaults to creating a ~/.stack/global-config/stack.yaml
+#     from the most recent LTS resolver
+#   - And will expect to find whatever compiler version that LTS points to
+#   - This will happen if you built in a different WORKDIR than where you copied the YAML files
+
+# -------------------------------------------------------------------------------------------
+# STAGE 2: Build
+# -------------------------------------------------------------------------------------------
+FROM haskell:8.10.7 as build
+
+# Copy stack's cache of your project's compiled dependencies
+# from the previous build stage to the container
+COPY --from=dependencies /root/.stack /root/.stack
+
+# Change the container working directory to where you want to copy your project files
+WORKDIR /opt/build
+
+# Copy the entire contents of your local project folder
+# to this new container (...and not just the YAMLs)
+COPY . .
+
+# Build your project
+RUN stack build
+
+# Move your compiled Haskell binary to a path easily accessible from the next stage
+RUN mv "$(stack path --local-install-root --system-ghc)/bin" /opt/build/bin
+
+# -------------------------------------------------------------------------------------------
+# STAGE 3: Deploy
+# -------------------------------------------------------------------------------------------
+# Copy the compiled Haskell binary to a more lightweight (and less diskspace-hungry) image
+# for uploading to a repository or using in deployment. 'ubuntu' is not the base image for
+# the 'haskell' image, so this should probably be changed to 'debian'/etc.
+FROM ubuntu:20.04 as deploy
+
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+
+# Install libgmp using the .deb from the dependencies stage
+# To-Do: Find a way to ensure the same version of libgmp is used as in the previous
+#        two build stages. Have experience a downgrade at this step before. Changing
+#        from Ubuntu to Debian for this final stage would probably help here.
+COPY --from=dependencies /opt/build/libgmp.deb /tmp
+RUN dpkg -i /tmp/libgmp.deb && rm /tmp/libgmp.deb
+
+# Copy your compiled program from the build stage
+COPY --from=build /opt/build/bin .
+
+# Execute your app 
+CMD ["/opt/app/wordru-exe", "--verbose"]
