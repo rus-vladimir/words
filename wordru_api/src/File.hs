@@ -18,6 +18,9 @@ newRand l u = randomRIO (l,u):: IO Int
 russianNounsTxt :: BS.ByteString
 russianNounsTxt = $(embedFile "russian_nouns.txt")
 
+oftenUsedRussianNounsTxt :: BS.ByteString
+oftenUsedRussianNounsTxt = $(embedFile "1000_words_ru.txt")
+
 countriesRuTxt :: BS.ByteString
 countriesRuTxt = $(embedFile "countries_ru.txt")
 
@@ -27,7 +30,7 @@ capitalsRuTxt = $(embedFile "capitals_ru.txt")
 getRandomNoun :: Int -> IO String
 getRandomNoun l = do
     comp <- newRand 3 10
-    sourceStrings <- readSourceFile
+    sourceStrings <- readSourceFile oftenUsedRussianNounsTxt
     let filteredStrings = L.filter (\w -> L.length w == comp && wordHasOnlyLetters w) sourceStrings
     ind <- newRand 0 (L.length filteredStrings - 1)
     return $ filteredStrings !! ind
@@ -35,13 +38,13 @@ getRandomNoun l = do
 isKnownWord :: String -> IO Bool
 isKnownWord w =
     do
-        readStrings <- readSourceFile
+        readStrings <- readSourceFile russianNounsTxt
         let isKnownWord = L.any (stringEqualCaseInsensitive w) readStrings
         return isKnownWord
 
-readSourceFile :: IO [String]
-readSourceFile = do
-    let byteStrings = tokenise (C.pack "\n") russianNounsTxt
+readSourceFile :: BS.ByteString -> IO [String]
+readSourceFile sf = do
+    let byteStrings = tokenise (C.pack "\n") sf
     let asString bs = DT.unpack $ DTE.decodeUtf8 bs
     return $ fmap asString byteStrings
 
