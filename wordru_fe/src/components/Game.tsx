@@ -3,6 +3,7 @@ import useFocus from "../api/config/utilHooks";
 import GameResult from "../api/core";
 import Keyboard from "./Keyboard";
 import Word from "./Word";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 interface GameProps {
     Game: GameResult,
     OnSubmit: any
@@ -27,11 +28,14 @@ const Game : React.FC<GameProps> = (props) =>{
     useEffect(() => {
         localStorage.setItem(props.Game.gid+'text', getTextInput);
     }, [getTextInput]);
-    
-    const updateInputValue = (evt:any, props:GameProps) => {
+
+    const handleOnChange = (evt:any) => {
         const val = evt.target.value;
-        if (val.length <= props.Game.gcomplexity) {
-            setTextInput(val);
+        updateInputValue(val);
+    }
+    const updateInputValue = (newValue:string) => {
+        if (newValue.length <= props.Game.gcomplexity) {
+            setTextInput(newValue);
         }
     }
 
@@ -44,6 +48,19 @@ const Game : React.FC<GameProps> = (props) =>{
         props.OnSubmit(getTextInput);
     }
 
+    const onKeyboardButtonClick = (str: string) => {
+        updateInputValue(getTextInput + str);
+    }
+
+    const handleDeleteWordClick = () => {
+        updateInputValue("");
+    }
+
+    const handleDeleteLetterClick = () => {
+        updateInputValue(getTextInput.slice(0, -1));
+    }
+    
+
     return (
         <React.Fragment>
 
@@ -55,11 +72,27 @@ const Game : React.FC<GameProps> = (props) =>{
             <React.Fragment>
                 <h1>Round <span>{props.Game.grounds.length+1}</span></h1>
                 <form onSubmit={(e) => onSumbit(e, props)}>
-                    <input type="text" autoFocus ref={inputRef} value={getTextInput} onChange={evt => updateInputValue(evt, props)}/>
-                    <input type="submit" value="Submit" />
+                <div className="field has-addons">
+                    <div className="control">
+                        <button type="button" className="button is-clickable" onClick={handleDeleteWordClick}>
+                            <FontAwesomeIcon icon="broom" />
+                        </button>
+                    </div>
+                    <div className="control has-icons-left has-icons-right">
+                        <input className="input" placeholder="" type="text" autoFocus ref={inputRef} value={getTextInput} onChange={evt => handleOnChange(evt)}/>
+                    </div>
+                    <div className="control">
+                        <button type="button" className="button is-clickable" onClick={handleDeleteLetterClick}>
+                            <FontAwesomeIcon icon="delete-left" />
+                        </button>
+                    </div>
+                    <div className="control">
+                        <button type="submit" className="button is-info">Submit</button>
+                    </div>
+                    </div>
                 </form>
                 <br/>
-                <Keyboard Game={props.Game} ></Keyboard>
+                <Keyboard Game={props.Game} onClick={onKeyboardButtonClick} ></Keyboard>
             </React.Fragment>
             }
 

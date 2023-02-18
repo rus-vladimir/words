@@ -11,8 +11,9 @@ export enum Presence {
 
 interface LetterProps {
     
-    Char : string,
-    Presence : Presence
+    char : string,
+    presence : Presence,
+    onClick? : (char: string) => void
 }
  
 interface LetterState {
@@ -61,11 +62,16 @@ const getStyle = (p: Presence) => {
             return emptyStyle!;
     }
 }
-
  
 class Letter extends Component<LetterProps, LetterState> {
+
+    handleClick = () => {
+        if (this.props.onClick)
+            this.props.onClick(this.props.char);
+    }
+
     render() { 
-        const char= this.props.Char;
+        const char= this.props.char;
         const styles = {
             border: '1px solid rgba(0, 0, 0, 0.5)',
             margin: '2px',
@@ -73,14 +79,14 @@ class Letter extends Component<LetterProps, LetterState> {
             width: '35px',
         };
 
-        const letterStyle = getStyle(this.props.Presence)
+        const letterStyle = getStyle(this.props.presence)
     
         return ( 
          <span style={styles}>
             {
                 char 
                 ?
-                  <span style={letterStyle}>{char}</span>
+                  <span style={letterStyle} onClick={this.handleClick}>{char}</span>
                 :
                   <span>_</span>
             }

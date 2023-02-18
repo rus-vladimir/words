@@ -12,15 +12,15 @@ interface WordState {
 }
 
 const merge = (originalString:string, resultString:string) => {
-    console.log(originalString, resultString);
+    // console.log(originalString, resultString);
     if (originalString && resultString ){
         return [...originalString].map((c,ci:number) =>
             resultString[ci] == "#" 
-                ? <Letter key={1000+ci} Char={c} Presence={Presence.Missing}/>
+                ? <Letter key={1000+ci} char={c} presence={Presence.Missing} />
                 : 
                 resultString[ci] == resultString[ci].toLowerCase() 
-                    ? <Letter key={1000+ci} Char={c} Presence={Presence.WrongPossition}/>
-                    : <Letter key={1000+ci} Char={c} Presence={Presence.CorrectPosition}/>
+                    ? <Letter key={1000+ci} char={c} presence={Presence.WrongPossition} />
+                    : <Letter key={1000+ci} char={c} presence={Presence.CorrectPosition} />
             )
     }
 }
@@ -42,11 +42,11 @@ class Word extends Component<WordProps, WordState> {
                                 <br/>
                             </div>)
                         }
-                       {arr.map((e,i) =><Letter key={2000+i} Presence={Presence.Empty} Char={"_"}/>)}
+                       {arr.map((e,i) =><Letter key={2000+i} presence={Presence.Empty} char={"_"}/>)}
                     </div >
                     :
                     <div>
-                        {arr.map((e,i) =><Letter key={2000+i} Presence={Presence.Empty} Char={"_"}/>)}
+                        {arr.map((e,i) =><Letter key={2000+i} presence={Presence.Empty} char={"_"}/>)}
                     </div >
                 }
             </div>

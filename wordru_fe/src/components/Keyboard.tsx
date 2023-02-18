@@ -3,7 +3,8 @@ import GameResult from "../api/core";
 import Letter, { Presence } from "./Letter";
 
 interface KeyboardProps {
-    Game: GameResult
+    Game: GameResult,
+    onClick? : (char: string) => void
 }
 
 const RussianLetters = [["а","б","в","г","д","е"],["ж","з","и","й","к","л"],["м","н","о","п","р","с"],["т","у","ф","х","ц","ч","ш"],["щ","ъ","ы","ь","э","ю","я"]];
@@ -11,7 +12,7 @@ const RussianLetters = [["а","б","в","г","д","е"],["ж","з","и","й","к
 
 interface CharPresence {
     char: string,
-    presense: Presence;
+    presense: Presence
  }
 
  
@@ -19,7 +20,7 @@ const Keyboard : React.FC<KeyboardProps> = (props) => {
 
     const merge = (originalString:string, resultString:string) : CharPresence[]=> {
         if (originalString && resultString && originalString.length == resultString.length ) {
-            console.log(originalString, resultString);
+            // console.log(originalString, resultString);
             const hz = [...originalString].map((ch,ci:number) =>
                 {
                     let charPresence =  { char: ch} as CharPresence;
@@ -40,10 +41,10 @@ const Keyboard : React.FC<KeyboardProps> = (props) => {
     const getLettersStatus = () => {
         var introducedLetters = props.Game.grounds.reduce((a,b) => a.concat(b.at(0)!), "");
         var checkedLetters = props.Game.grounds.reduce((a,b) => a.concat(b.at(1)!), "");
-        console.log(`introduced: ${introducedLetters}`);
-        console.log(`checked: ${checkedLetters}`);
+        // console.log(`introduced: ${introducedLetters}`);
+        // console.log(`checked: ${checkedLetters}`);
         let mergeResult = merge(introducedLetters, checkedLetters);
-        console.log(`letterStatus ${JSON.stringify(mergeResult)}`)
+        // console.log(`letterStatus ${JSON.stringify(mergeResult)}`)
         return mergeResult;
     };
     const lettersStatus = getLettersStatus();
@@ -51,7 +52,7 @@ const Keyboard : React.FC<KeyboardProps> = (props) => {
     const getPresence = (letter:string) : Presence =>
     {
         const statuses = lettersStatus?.filter((cp) => cp.char.toLocaleLowerCase() == letter.toLocaleLowerCase()).map((cp) => cp.presense);
-        console.log(`statuses for ${letter}: ${JSON.stringify(statuses)}`);
+        // console.log(`statuses for ${letter}: ${JSON.stringify(statuses)}`);
         if (statuses.some(s => s == Presence.CorrectPosition))
         {
             return Presence.CorrectPosition;
@@ -66,14 +67,14 @@ const Keyboard : React.FC<KeyboardProps> = (props) => {
         }
         return Presence.Empty;
     }
-    
+
     return (
         <React.Fragment>
             {
                 RussianLetters.map((row,ri) => 
                     <div key={(ri+1)*10}>{
                             row.map((l, li) => 
-                                <Letter key={(ri+1)*10+(li+1)*5} Presence={getPresence(l)} Char={l}></Letter>
+                                <Letter key={(ri+1)*10+(li+1)*5} presence={getPresence(l)} char={l} onClick={props.onClick}></Letter>
                             )
                         }
                     </div>
