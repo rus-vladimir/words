@@ -43,7 +43,8 @@ const Game : React.FC<GameProps> = (props) =>{
         e.preventDefault();
 
         setTextInput("");
-        setInputFocus();
+        if (document.activeElement === inputRef.current)
+            setInputFocus();
         localStorage.removeItem(props.Game.gid+'text');
         props.OnSubmit(getTextInput);
     }
