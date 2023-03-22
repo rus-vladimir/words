@@ -7,7 +7,9 @@ interface KeyboardProps {
     onClick? : (char: string) => void
 }
 
-const RussianLetters = [["а","б","в","г","д","е"],["ж","з","и","й","к","л"],["м","н","о","п","р","с"],["т","у","ф","х","ц","ч","ш"],["щ","ъ","ы","ь","э","ю","я"]];
+const CyrillicLetters = [["а","б","в","г","д","е"],["ж","з","и","й","к","л"],["м","н","о","п","р","с"],["т","у","ф","х","ц","ч","ш"],["щ","ъ","ы","ь","э","ю","я"]];
+
+const LatinLetters = [["A","B","C","D","E"],["F","G","H","I","J"],["K","L","M","N","O"],["P","Q","R","S","T"],["U","V","W","X","Y","Z"]];
 
 
 interface CharPresence {
@@ -68,10 +70,15 @@ const Keyboard : React.FC<KeyboardProps> = (props) => {
         return Presence.Empty;
     }
 
+    const letters = () : string [][] =>
+    {
+        return (window.lang == "ru") ? CyrillicLetters : LatinLetters;
+    }
+
     return (
         <React.Fragment>
             {
-                RussianLetters.map((row,ri) => 
+                letters().map((row,ri) => 
                     <div key={(ri+1)*10}>{
                             row.map((l, li) => 
                                 <Letter key={(ri+1)*10+(li+1)*5} presence={getPresence(l)} char={l} onClick={props.onClick}></Letter>

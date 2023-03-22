@@ -51,8 +51,8 @@ import Network.Wai.Middleware.Cors
 import System.Environment (lookupEnv)
 
 type GameApi =
-    "startGame" :> Capture "session" UUID :> Get '[JSON] GameResultModel
-    :<|> "check" :> Capture "session" UUID :> Capture "word" String :> Get '[JSON] GameResultModel
+    "startGame" :> Capture "lang" String :> Capture "session" UUID :> Get '[JSON] GameResultModel
+    :<|> "check" :> Capture "lang" String :> Capture "session" UUID :> Capture "word" String :> Get '[JSON] GameResultModel
 
 
 data GameResultModel = GameResultModel
@@ -77,42 +77,45 @@ instance ToJSON GameResult
 instance ToJSON GameStatus
 instance ToJSON FinishedGameResult
 
-startGameHandler :: UUID -> Handler GameResultModel
-startGameHandler uid = do
+startGameHandler :: String -> UUID -> Handler GameResultModel
+startGameHandler lng uid = do
   redisHostString <- liftIO $ lookupEnv "REDIS_HOST"
   redisPortString <- liftIO $ lookupEnv "REDIS_PORT"
   let redisConnectInfo = buildConnectInfo redisHostString redisPortString
-  maybeCachedGame <- liftIO $ fetchGameRedis redisConnectInfo uid
+  maybeCachedGame <- liftIO $ fetchGameRedis redisConnectInfo (gameKey lng uid)
   case maybeCachedGame of
-    Just game -> return $ toGameResultModel $ toGameResult game
+    Just game | lang game == lng -> return $ toGameResultModel $ toGameResult game
     -- Nothing -> Handler $ (throwE $ err401 { errBody = "Could not find user with that ID" })
-    Nothing -> do
-       w <- liftIO $ getRandomNoun 5
-       let game = newGame uid w
-       liftIO $ cacheGame redisConnectInfo uid game
+    _ -> do
+       w <- liftIO $ getRandomNoun lng 4
+       let game = newGame lng uid w
+       liftIO $ cacheGame redisConnectInfo (gameKey lng uid) game
        return $ toGameResultModel $ toGameResult game
 
-checkGameHandler :: UUID -> String -> Handler GameResultModel
-checkGameHandler uid input = do
+checkGameHandler :: String -> UUID -> String -> Handler GameResultModel
+checkGameHandler lng uid input = do
   redisHostString <- liftIO $ lookupEnv "REDIS_HOST"
   redisPortString <- liftIO $ lookupEnv "REDIS_PORT"
   let redisConnectInfo = buildConnectInfo redisHostString redisPortString
-  maybeCachedGame <- liftIO $ fetchGameRedis redisConnectInfo uid
+  maybeCachedGame <- liftIO $ fetchGameRedis redisConnectInfo (gameKey lng uid)
   case maybeCachedGame of
     Just game -> do
       let gameStatus = getGameStatus $ rounds game
       let isExpectedLength = length input == length (word game)
-      isKnownWord <- liftIO $ isKnownWord input
+      isKnownWord <- liftIO $ isKnownWord (lang game) input
       let isValid = isKnownWord && isExpectedLength
       let nextGame = nextRound game input
       let isGameFinished = gameIsFinished gameStatus
-      unless ( isGameFinished || not isValid) (liftIO $ cacheGame redisConnectInfo uid nextGame)
+      unless ( isGameFinished || not isValid) (liftIO $ cacheGame redisConnectInfo (gameKey lng uid) nextGame)
       let resultGame = toGameResultModel $ toGameResult $ if not isGameFinished then nextGame else game
       if not isValid
         then Handler $ throwE err400
         else return resultGame
 
     Nothing -> Handler $ throwE $ err404 { errBody = "Could not find game with that ID" }
+
+gameKey :: String -> UUID -> String
+gameKey lng uid = lng ++ show uid
 
 toGameResultModel :: GameResult -> GameResultModel
 toGameResultModel g = GameResultModel (gameId g) (show $ gameStatus g) (complexity g) (correctWord g) (toStringRounds . playedRounds $ g)

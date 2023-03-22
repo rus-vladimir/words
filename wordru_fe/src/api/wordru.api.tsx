@@ -14,8 +14,8 @@ export const useGameSession  = (sessionId:string) : [
 
   const getCheckGame = (input? : string): AxiosPromise<GameResult|null> => {
     const url = input == null 
-      ? `startGame/${sessionId}` 
-      : `check/${sessionId}/${input}`
+      ? `startGame/${window.lang}/${sessionId}` 
+      : `check/${window.lang}/${sessionId}/${input}`
     return refetch({url})
   }
 

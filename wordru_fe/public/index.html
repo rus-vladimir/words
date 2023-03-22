@@ -25,6 +25,15 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Words</title>
+    <script>
+      const pathname = window.location.pathname.replace('/', '');
+      console.log(pathname);
+      if (pathname === "en" || pathname === "nl" || pathname === "ru"){
+        window.lang = pathname;
+      } else {
+        window.lang = localStorage.getItem('lang') ?? navigator.languages[0]?.split('-')[0]??"ru";
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

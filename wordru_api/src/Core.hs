@@ -6,10 +6,6 @@ import Data.UUID
 import Data.Char
 
 
-newtype Session a = Session
-  { unSession :: a
-  }
-
 data CharPresense = Missing | WrongPosition | RightPosition
   deriving (Generic, Show, Read, Eq)
 
@@ -33,7 +29,8 @@ newtype CheckResult = CheckResult
 
 data Game = Game
   {
-    id :: UUID
+    lang :: String
+  , id :: UUID
   , word :: String
   , rounds :: [Round]
   } deriving (Generic, Show, Read)
@@ -57,15 +54,15 @@ gameIsFinished :: GameStatus -> Bool
 gameIsFinished (Finished _) = True
 gameIsFinished _ = False
 
-newGame :: UUID -> String ->Game
-newGame uid word = Game uid word []
+newGame :: String -> UUID -> String ->Game
+newGame lang uid word = Game lang uid word []
 
 nextRound :: Game -> String -> Game
-nextRound (Game id cw r) inputWord =
+nextRound (Game lang id cw r) inputWord =
   let roundResult = calculateResult cw inputWord
       rounds = Round (length r, inputWord, roundResult):r
   in
-  Game id cw rounds
+  Game lang id cw rounds
 
 calculateResult :: String -> String -> CheckResult
 calculateResult w s = CheckResult $ validateCharPair (zip  w s) w
@@ -81,7 +78,7 @@ getStatus e a w
   | otherwise  = Missing
 
 toGameResult :: Game -> GameResult
-toGameResult (Game i w rs) = GameResult i (getGameStatus rs) (length w) w rs
+toGameResult (Game lang i w rs) = GameResult i (getGameStatus rs) (length w) w rs
 
 getGameStatus :: [Round] -> GameStatus
 getGameStatus [] = New

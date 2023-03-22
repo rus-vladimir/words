@@ -14,20 +14,20 @@ runRedisAction redisInfo action = do
   connection <- connect redisInfo
   runRedis connection action
 
-cacheGame :: ConnectInfo -> UUID -> Game -> IO ()
-cacheGame redisInfo uid game = runRedisAction redisInfo $ void $ 
-  setex (pack . show $ uid) 3600 (pack . show $ game)
+cacheGame :: ConnectInfo -> String -> Game -> IO ()
+cacheGame redisInfo key game = runRedisAction redisInfo $ void $ 
+  setex (pack key) 3600 (pack . show $ game)
 
-fetchGameRedis :: ConnectInfo -> UUID -> IO (Maybe Game)
-fetchGameRedis redisInfo uid = runRedisAction redisInfo $ do
-  result <- get (pack . show $ uid)
+fetchGameRedis :: ConnectInfo -> String -> IO (Maybe Game)
+fetchGameRedis redisInfo key = runRedisAction redisInfo $ do
+  result <- get (pack key)
   case result of
     Right (Just gameString) -> return $ Just (read . unpack $ gameString)
     _ -> return Nothing
 
-deleteGameCache :: ConnectInfo -> UUID -> IO ()
-deleteGameCache redisInfo uid = do
+deleteGameCache :: ConnectInfo -> String -> IO ()
+deleteGameCache redisInfo key = do
   connection <- connect redisInfo
   runRedis connection $ do
-    _ <- del [pack . show $ uid]
+    _ <- del [pack key]
     return ()
