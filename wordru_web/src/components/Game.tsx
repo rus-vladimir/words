@@ -48,7 +48,7 @@ const Game: React.FC<GameProps> = (props) => {
     }
   };
 
-  const onSumbit = (e: FormEvent<HTMLFormElement>, props: GameProps) => {
+  const onSumbit = (e: FormEvent<HTMLFormElement>, _: GameProps) => {
     e.preventDefault();
 
     handleSubmit();
@@ -201,9 +201,6 @@ const Game: React.FC<GameProps> = (props) => {
           </div>
         </React.Fragment>
       )}
-      <div className="letter-missing letter-wrong letter-correct letter-empty hidden">
-        asd
-      </div>
     </React.Fragment>
   );
 };

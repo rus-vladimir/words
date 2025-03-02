@@ -1,14 +1,18 @@
-import { useState } from "react";
 import { useNewGame } from "../api/wordru.api";
 import Game from "./Game";
 import { v4 as uuidv4 } from "uuid";
 import Logo from "../assets/logo.svg?react";
 import { Lang } from "./Lang";
-import i18n from "i18next";
 import { Loader2Icon } from "lucide-react";
 import { DarkSwitch } from "./Dark";
 
-export function Main() {
+interface MainProps {
+  SupportedLanguages: [lang: string, name: string][];
+  Language: string;
+  OnChange: (language: string) => void;
+}
+
+export function Main(props: MainProps) {
   function newSession(): string {
     localStorage.clear();
     const session = uuidv4();
@@ -18,38 +22,38 @@ export function Main() {
 
   const maybeSession = localStorage.getItem("session");
 
-  const [language, setLanguage] = useState<string>(i18n.languages[0]);
-
   const sessionId = maybeSession == null ? newSession() : maybeSession;
 
   const { data, isLoading, error, onCheckWord } = useNewGame({
-    language,
-    sessionId,
+    Language: props.Language,
+    SessionId: sessionId,
   });
-
-  const onLanguageChange = (language: string) => {
-    setLanguage(language);
-  };
 
   return (
     <div className="flex-center relative m-1 h-screen flex-col dark:bg-gray-900">
-      <header className="flex-center size-24 md:size-[10rem]">
-        <Logo className="animate-logo-spin" />
-      </header>
-      <Lang OnChange={onLanguageChange} />
-      <DarkSwitch />
-      {(!isLoading || data != null) && (
-        <Game
-          Game={data!}
-          HasError={error}
-          OnSubmit={onCheckWord}
-          Language={language}
+      <div className="flex-center size-24 md:size-[10rem]">
+        <Logo className="animate-logo-spin size-24" />
+      </div>
+      <div>
+        <Lang
+          OnChange={props.OnChange}
+          SupportedLanguages={props.SupportedLanguages}
+          Language={props.Language}
         />
-      )}
+        <DarkSwitch />
+        {(!isLoading || data != null) && (
+          <Game
+            Game={data!}
+            HasError={error}
+            OnSubmit={onCheckWord}
+            Language={props.Language}
+          />
+        )}
 
-      {isLoading && (
-        <Loader2Icon className="absolute size-40 animate-spin text-orange-700 opacity-30" />
-      )}
+        {isLoading && (
+          <Loader2Icon className="absolute size-40 animate-spin text-orange-700 opacity-30" />
+        )}
+      </div>
     </div>
   );
 }

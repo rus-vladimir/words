@@ -1,16 +1,18 @@
 import i18n from "i18next";
+
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 
 interface LangProps {
   OnChange: (language: string) => void;
+  SupportedLanguages: [lang: string, name: string][];
+  Language: string;
 }
 
 export function Lang(props: LangProps) {
@@ -20,17 +22,20 @@ export function Lang(props: LangProps) {
   };
 
   return (
-    <div className="absolute top-0 right-0 mt-2 mr-2 w-24">
-      <Select defaultValue={i18n.languages[0]} onValueChange={onLangChange}>
-        <SelectTrigger className="w-24">
+    <div className="absolute top-0 right-0 mt-2 mr-2 w-30">
+      <Select value={props.Language} onValueChange={onLangChange}>
+        <SelectTrigger className="w-30">
           <SelectValue placeholder="Lang" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="ru">Русский</SelectItem>
-            <SelectItem value="ro">Română</SelectItem>
-            <SelectItem value="nl">Dutch</SelectItem>
+            {Object.entries(props.SupportedLanguages).map(
+              ([_, [code, name]]) => (
+                <SelectItem value={code} key={code}>
+                  {name}
+                </SelectItem>
+              ),
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>

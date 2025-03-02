@@ -3,8 +3,8 @@ import GameResult from "./core";
 import { useEffect, useState } from "react";
 
 interface GameSessionProps {
-  sessionId: string;
-  language: string;
+  SessionId: string;
+  Language: string;
 }
 
 export function useNewGame(props: GameSessionProps) {
@@ -23,7 +23,7 @@ export function useNewGame(props: GameSessionProps) {
     }, 1000);
 
     wordsAxios
-      .get<GameResult>(`check/${props.language}/${props.sessionId}/${input}`)
+      .get<GameResult>(`check/${props.Language}/${props.SessionId}/${input}`)
       .then((res) => {
         if (res.status === 200) {
           setData(res.data);
@@ -46,7 +46,7 @@ export function useNewGame(props: GameSessionProps) {
 
   var gameStarted = () =>
     wordsAxios
-      .get<GameResult>(`startGame/${props.language}/${props.sessionId}`)
+      .get<GameResult>(`startGame/${props.Language}/${props.SessionId}`)
       .then((res) => {
         if (res.status === 200) {
           setData(res.data);
@@ -61,7 +61,7 @@ export function useNewGame(props: GameSessionProps) {
 
   useEffect(() => {
     gameStarted();
-  }, [props.language, props.sessionId]);
+  }, [props.Language, props.SessionId]);
 
   return { data, isLoading, error, onCheckWord };
 }
