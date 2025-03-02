@@ -25,6 +25,21 @@ const LatinLetters = [
   ["U", "V", "W", "X", "Y", "Z"],
 ];
 
+const RomanianLetters = [
+  ["A", "Ă", "Â", "B", "C", "D"],
+  ["E", "F", "G", "H", "I", "Î"],
+  ["J", "K", "L", "M", "N", "O"],
+  ["P", "Q", "R", "S", "Ș", "T"],
+  ["Ț", "U", "V", "W", "X", "Y", "Z"],
+];
+
+var langMap = {
+  en: LatinLetters,
+  nl: LatinLetters,
+  ru: CyrillicLetters,
+  ro: RomanianLetters,
+};
+
 interface CharPresence {
   char: string;
   presense: LetterPresence;
@@ -94,7 +109,7 @@ const Keyboard: React.FC<KeyboardProps> = (props) => {
   };
 
   const letters = (): string[][] => {
-    return props.Language == "ru" ? CyrillicLetters : LatinLetters;
+    return langMap[props.Language as keyof typeof langMap];
   };
 
   const getLetterClassName = (c: string) => {
