@@ -17,7 +17,7 @@ class Letter extends Component<LetterProps> {
     return (
       <span onClick={this.handleClick}>
         <Button
-          className={`${getLetterColor(this.props.presence)} text-secondary dark:text-primary size-9 content-center p-3 text-2xl capitalize sm:size-12 sm:p-4 sm:text-sm`}
+          className={`${getLetterColor(this.props.presence)} size-9 content-center p-3 text-2xl font-bold capitalize sm:size-12 sm:p-4 sm:text-xl lg:text-3xl`}
         >
           {this.props.char}
         </Button>

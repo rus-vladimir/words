@@ -126,7 +126,7 @@ const Keyboard: React.FC<KeyboardProps> = (props) => {
             <Button
               key={(ri + 1) * 10 + (li + 1) * 5}
               onClick={() => props.OnClick(l)}
-              className={`${getLetterClassName(l)} text-secondary dark:text-primary size-11 content-center p-3 text-2xl capitalize sm:p-4 sm:text-2xl sm:font-semibold md:size-11 lg:size-12`}
+              className={`${getLetterClassName(l)} size-11 content-center p-3 text-2xl font-bold capitalize sm:p-4 sm:text-3xl sm:font-semibold md:size-11 lg:size-12`}
             >
               {l}
             </Button>

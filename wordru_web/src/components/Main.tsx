@@ -30,7 +30,7 @@ export function Main(props: MainProps) {
   });
 
   return (
-    <div className="flex-center relative m-1 h-screen flex-col dark:bg-gray-900">
+    <div className="flex-center relative m-1 h-screen flex-col">
       <div className="flex-center size-24 md:size-[10rem]">
         <Logo className="animate-logo-spin size-24" />
       </div>

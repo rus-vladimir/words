@@ -8,12 +8,13 @@ export enum LetterPresence {
 export function getLetterColor(p: LetterPresence) {
   switch (p) {
     case LetterPresence.Missing:
-      return "bg-gray-500 hover:bg-gray-400 focus:bg-gray-600";
+      return "bg-neutral-600 dark:text-primary text-primary-foreground shadow-sm hover:bg-neutral-600/90 focus:bg-neutral-600/90";
     case LetterPresence.WrongPossition:
-      return "bg-orange-500 hover:bg-orange-400 focus:bg-orange-600";
+      return "bg-orange-600 dark:text-primary text-primary-foreground shadow-sm hover:bg-orange-600/90 focus:bg-orange-600/90";
     case LetterPresence.CorrectPosition:
-      return "bg-green-500 hover:bg-green-400 focus:bg-green-600";
+      return "bg-green-700 dark:text-primary text-primary-foreground shadow-sm hover:bg-green-700/90 focus:bg-green-700/90";
     default:
-      return "bg-zinc-900 hover:bg-zinc-800 focus:bg-zinc-950 dark:bg-neutral-950 dark:hover:bg-neutral-700 dark:focus:bg-black";
+      return "bg-stone-800 dark:text-primary text-primary-foreground shadow-sm hover:bg-stone-800/90 focus:bg-stone-800/90";
+              
   }
 }

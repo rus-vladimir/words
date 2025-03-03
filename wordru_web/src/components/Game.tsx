@@ -178,7 +178,8 @@ const Game: React.FC<GameProps> = (props) => {
               </Button>
               <Button
                 type="submit"
-                className="bg-primary text-primary-foreground w-48 text-3xl font-semibold tracking-tight shadow-lg"
+                variant="outline"
+                className="w-48 text-3xl font-semibold tracking-tight shadow-lg"
               >
                 {t("game.submit")}
               </Button>
