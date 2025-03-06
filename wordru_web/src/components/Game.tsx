@@ -140,7 +140,7 @@ const Game: React.FC<GameProps> = (props) => {
             {t("game.round")} <span>#{props.Game.grounds.length + 1}</span>
           </div>
           <form
-            className="flex flex-col items-center justify-center space-y-3"
+            className="flex flex-col items-center justify-center space-y-3 md:space-y-5"
             onSubmit={(e) => onSumbit(e, props)}
           >
             <div className={props.HasError ? `bg-red-200` : ``}>
@@ -157,7 +157,7 @@ const Game: React.FC<GameProps> = (props) => {
                     (_, i) => {
                       return (
                         <InputOTPSlot
-                          className="size-8 border-black font-bold capitalize sm:size-10 lg:size-14 dark:border-white"
+                          className="xxs:text-xl size-8 border-black font-bold capitalize sm:size-10 sm:text-2xl lg:size-14 lg:text-3xl dark:border-white"
                           key={i}
                           index={i}
                         />
@@ -195,7 +195,7 @@ const Game: React.FC<GameProps> = (props) => {
               </Button>
             </div>
           </form>
-          <div className="mt-2">
+          <div className="mt-2 md:mt-6">
             <Keyboard
               Game={props.Game}
               OnClick={onKeyboardButtonClick}
