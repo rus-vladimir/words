@@ -120,7 +120,7 @@ const Game: React.FC<GameProps> = (props) => {
 
   return (
     <React.Fragment>
-      {<Word Game={props.Game} />}
+      <Word Game={props.Game} />
 
       {props.Game.gstatus === "Finished Win" && (
         <div className="flex-center mt-20 text-2xl text-green-800">
@@ -136,8 +136,8 @@ const Game: React.FC<GameProps> = (props) => {
       )}
       {!props.Game.gstatus.startsWith("Finished") && (
         <React.Fragment>
-          <div className="text-primary mt-1 text-center text-3xl font-semibold">
-            {t("game.round")} <span>{props.Game.grounds.length + 1}</span>
+          <div className="mb-2 text-center text-3xl font-semibold">
+            {t("game.round")} <span>#{props.Game.grounds.length + 1}</span>
           </div>
           <form
             className="flex flex-col items-center justify-center space-y-3"
@@ -157,7 +157,7 @@ const Game: React.FC<GameProps> = (props) => {
                     (_, i) => {
                       return (
                         <InputOTPSlot
-                          className="size-8 font-bold capitalize sm:size-10 lg:size-14"
+                          className="size-8 border-black font-bold capitalize sm:size-10 lg:size-14 dark:border-white"
                           key={i}
                           index={i}
                         />
@@ -172,6 +172,7 @@ const Game: React.FC<GameProps> = (props) => {
                 variant="outline"
                 size="icon"
                 type="button"
+                className="outline-1"
                 onClick={handleDeleteWordClick}
               >
                 <FontAwesomeIcon icon="broom" />
@@ -179,7 +180,7 @@ const Game: React.FC<GameProps> = (props) => {
               <Button
                 type="submit"
                 variant="outline"
-                className="w-48 text-3xl font-semibold tracking-tight shadow-lg"
+                className="w-48 text-3xl font-semibold tracking-tight shadow-lg outline-1"
               >
                 {t("game.submit")}
               </Button>
@@ -187,6 +188,7 @@ const Game: React.FC<GameProps> = (props) => {
                 type="button"
                 variant="outline"
                 size="icon"
+                className="outline-1"
                 onClick={handleDeleteLetterClick}
               >
                 <FontAwesomeIcon icon="delete-left" />
