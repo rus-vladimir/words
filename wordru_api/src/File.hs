@@ -16,45 +16,55 @@ newRand :: Int -> Int -> IO Int
 newRand l u = randomRIO (l,u):: IO Int
 -- RUSSIAN
 russianNounsTxt :: BS.ByteString
-russianNounsTxt = $(embedFile "russian_nouns.txt")
+russianNounsTxt = $(embedFile "dict/russian_nouns.txt")
 
 russianTopTxt :: BS.ByteString
-russianTopTxt = $(embedFile "1000_words_ru.txt")
+russianTopTxt = $(embedFile "dict/1000_words_ru.txt")
 
 countriesRuTxt :: BS.ByteString
-countriesRuTxt = $(embedFile "countries_ru.txt")
+countriesRuTxt = $(embedFile "dict/countries_ru.txt")
 
 capitalsRuTxt :: BS.ByteString
-capitalsRuTxt = $(embedFile "capitals_ru.txt")
+capitalsRuTxt = $(embedFile "dict/capitals_ru.txt")
 
 -- ENGLISH
 
 englishNounsTxt :: BS.ByteString
-englishNounsTxt = $(embedFile "english_nouns.txt")
+englishNounsTxt = $(embedFile "dict/english_nouns.txt")
 
 englishTopTxt :: BS.ByteString
-englishTopTxt = $(embedFile "1500_english_nouns.txt")
+englishTopTxt = $(embedFile "dict/1500_english_nouns.txt")
 
 -- DUTCH
 dutchNounsTxt :: BS.ByteString
-dutchNounsTxt = $(embedFile "dutch_words.txt")
+dutchNounsTxt = $(embedFile "dict/dutch_words.txt")
 
 dutchTopTxt :: BS.ByteString
-dutchTopTxt = $(embedFile "400_dutch_words.txt")
+dutchTopTxt = $(embedFile "dict/400_dutch_words.txt")
+
+
+-- ROMANIAN
+romanianNounsTxt :: BS.ByteString
+romanianNounsTxt = $(embedFile "dict/romanian_dict.txt")
+
+romanianTopTxt :: BS.ByteString
+romanianTopTxt = $(embedFile "dict/romanian_nouns.txt")
 
 
 getWordsByLang :: String -> BS.ByteString
 getWordsByLang "ru" = russianTopTxt
 getWordsByLang "en" = englishTopTxt
 getWordsByLang "nl" = dutchTopTxt
-getWordsByLang _ = russianTopTxt
+getWordsByLang "ro" = romanianTopTxt
+getWordsByLang _ = englishTopTxt
 
 
 getAllKnownWordsByLang :: String -> BS.ByteString
 getAllKnownWordsByLang "ru" = russianTopTxt <> russianNounsTxt
 getAllKnownWordsByLang "en" = englishTopTxt <> englishNounsTxt
 getAllKnownWordsByLang "nl" = dutchTopTxt <> dutchNounsTxt
-getAllKnownWordsByLang _ = russianTopTxt <> russianNounsTxt
+getAllKnownWordsByLang "ro" = romanianTopTxt <> romanianNounsTxt
+getAllKnownWordsByLang _ = englishTopTxt <> englishTopTxt
 
 
 getRandomNoun :: String -> Int -> IO String
