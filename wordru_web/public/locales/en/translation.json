@@ -2,5 +2,16 @@
   "game.won": "YOU WON! Word:",
   "game.lost": "YOU LOST! Word:",
   "game.round": "Round",
-  "game.submit": "Submit"
+  "game.submit": "Submit",
+  "rules.game":"Game rules",
+  "rules.guess":"Player has to guess a hidden word",
+  "rules.rounds": "Game consists of 6 rounds",
+  "rules.length": "Each round player writes a word of the given length",
+  "rules.accepted": "If the word is accepted, word's letters change their colors:",
+  "rules.green": "Green",
+  "rules.green.info": "Letter exists on the same position in hidden the word",
+  "rules.orange": "Orange",
+  "rules.orange.info": "Letter exists on the same position in hidden the word",
+  "rules.gray": "Gray",
+  "rules.gray.info": "Letter does not exist in the hidden word"
 }

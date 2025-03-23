@@ -2,5 +2,16 @@
   "game.won": "Ați câștigat! Cuvânt:",
   "game.lost": "Ați pierdut! Cuvânt:",
   "game.round": "Tur",
-  "game.submit": "Trimite"
+  "game.submit": "Trimite",
+  "rules.game":"Regulile jocului",
+  "rules.guess":"Jucătorul trebuie să ghicească un cuvânt ascuns",
+  "rules.rounds": "Jocul constă din 6 tururi",
+  "rules.length": "Fiecare tur jucător scrie un cuvânt cu lungimea dată",
+  "rules.accepted": "Dacă cuvântul este acceptat, literele cuvântului își schimbă culorile",
+  "rules.green": "Verde",
+  "rules.green.info": "Litera există în aceeași poziție în cuvântul ascuns",
+  "rules.orange": "Portocalie",
+  "rules.orange.info": "Litera există într-o poziție diferită în cuvântul ascuns",
+  "rules.gray": "Gri",
+  "rules.gray.info": "Litera nu există în cuvântul ascuns"
 }

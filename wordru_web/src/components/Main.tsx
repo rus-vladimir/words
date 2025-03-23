@@ -5,6 +5,7 @@ import Logo from "../assets/logo.svg?react";
 import { Lang } from "./Lang";
 import { Loader2Icon } from "lucide-react";
 import { DarkSwitch } from "./Dark";
+import { Info } from "./Info";
 
 interface MainProps {
   SupportedLanguages: [lang: string, name: string][];
@@ -35,12 +36,21 @@ export function Main(props: MainProps) {
         <Logo className="animate-logo-spin -mb-5 size-24" />
       </div>
       <div>
-        <Lang
-          OnChange={props.OnChange}
-          SupportedLanguages={props.SupportedLanguages}
-          Language={props.Language}
-        />
-        <DarkSwitch />
+        <div className="absolute top-0 right-0 mt-2 flex">
+          <div className="mr-2">
+            <Lang
+              OnChange={props.OnChange}
+              SupportedLanguages={props.SupportedLanguages}
+              Language={props.Language}
+            />
+          </div>
+          <div className="mr-2">
+            <Info />
+          </div>
+        </div>
+        <div className="absolute top-0 left-0 m-2">
+          <DarkSwitch />
+        </div>
         {(!isLoading || data != null) && (
           <Game
             Game={data!}

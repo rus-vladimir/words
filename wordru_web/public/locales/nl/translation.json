@@ -1,6 +1,17 @@
 {
-  "game.won": "YOU WON! Word:",
-  "game.lost": "YOU LOST! Word:",
-  "game.round": "Round",
-  "game.submit": "Submit"
+  "game.won": "JE HEBT GEWONNEN! Woord:",
+  "game.lost": "JE HEBT VERLOREN! Woord:",
+  "game.round": "Ronde",
+  "game.submit": "Indienen",
+  "rules.game":"Spelregels",
+  "rules.guess":"Speler moet een verborgen woord raden",
+  "rules.rounds": "Spel bestaat uit 6 ronden",
+  "rules.length": "Elke ronde schrijft speler een woord van de gegeven lengte",
+  "rules.accepted": "Als het woord wordt geaccepteerd, veranderen de letters van het woord van kleur",
+  "rules.green": "Groen",
+  "rules.green.info": "Letter bestaat op dezelfde positie in het verborgen woord",
+  "rules.orange": "Oranje",
+  "rules.orange.info": "Letter bestaat op een andere positie in het verborgen woord",
+  "rules.gray": "Grijs",
+  "rules.gray.info": "Letter bestaat niet in het verborgen woord"
 }

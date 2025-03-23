@@ -23,7 +23,7 @@ export function DarkSwitch() {
   return (
     <div>
       <SunMoon
-        className="text-primary absolute top-0 left-0 m-2 size-8 cursor-pointer opacity-80"
+        className="text-primary size-8 cursor-pointer opacity-80"
         onClick={() => handleOnClick()}
       />
     </div>

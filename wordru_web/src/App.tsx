@@ -1,7 +1,11 @@
 import "./index.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faBroom, faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
-library.add(faBroom, faDeleteLeft);
+import {
+  faBroom,
+  faDeleteLeft,
+  faQuestion,
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faBroom, faDeleteLeft, faQuestion);
 
 import { Main } from "./components/Main";
 import { useTranslation } from "react-i18next";
