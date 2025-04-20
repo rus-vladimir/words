@@ -9,9 +9,9 @@
   "rules.length": "Each round player writes a word of the given length",
   "rules.accepted": "If the word is accepted, word's letters change their colors:",
   "rules.green": "Green",
-  "rules.green.info": "Letter exists on the same position in hidden the word",
+  "rules.green.info": "Letter exists on the same position in the hidden the word",
   "rules.orange": "Orange",
-  "rules.orange.info": "Letter exists on the same position in hidden the word",
+  "rules.orange.info": "Letter exists on a different position in the hidden the word",
   "rules.gray": "Gray",
   "rules.gray.info": "Letter does not exist in the hidden word"
 }
